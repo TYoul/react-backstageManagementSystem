@@ -15,16 +15,19 @@ interface loginFailureAction {
 
 export type ModifyAction = LoginSuccessAction | loginFailureAction;
 
+// 登录成功的action
 const loginSuccessAction = (data: any): LoginSuccessAction => ({
   type: LOGIN_SUCCESS,
   payload: data,
 });
 
+// 登录失败的action
 const loginFailureAction = (data: any): loginFailureAction => ({
   type: LOGIN_FAILURE,
   payload: data,
 });
 
+// 由登录页面发出dispatch对应的action，在这个action里面发送对应登录的网络请求
 export const getLoginAction = (values: any): ThunkAction<void, RootState, unknown, ModifyAction> => async (dispatch, getState) => {
   const result: any = await getToken(values);
   const { status, data, msg } = result;

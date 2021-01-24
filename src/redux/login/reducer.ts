@@ -2,10 +2,10 @@ import { LOGIN_SUCCESS, LOGIN_FAILURE } from './constants';
 import { ModifyAction } from './actions';
 
 export interface StoreState {
-  user: {};
-  token: string;
-  isLogin: boolean;
-  msg: string;
+  user: {}; // 用户信息
+  token: string; // 用来登录验证的token
+  isLogin: boolean; // 是否是登录状态
+  msg: string; // 登录失败，服务器返回的错误信息
 }
 
 const defaultState: StoreState = {

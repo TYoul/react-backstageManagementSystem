@@ -15,12 +15,15 @@ const Login: React.FC = () => {
   const { isLogin, msg } = login;
   const history = useHistory();
 
+  // 登录提交
   const onFinish = (values: any) => {
     dispatch(getLoginAction(values));
   };
 
+  // 页面初始化，查看是否有token，和有token之后的对应操作
   useEffect(() => {
-    if (isLogin) {
+    const token = window.localStorage.getItem('token');
+    if (token) {
       history.push('/');
     } else if (!isLogin && msg) {
       message.error(msg);
