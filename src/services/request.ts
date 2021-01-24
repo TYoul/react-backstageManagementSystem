@@ -1,6 +1,9 @@
 import axios from 'axios';
 import qs from 'querystring';
+import store from '../redux/store';
 import { BASE_URL, TIMEOUT } from './config';
+import { message } from 'antd';
+import { signOutAction } from '../redux/login/actions';
 
 const instance = axios.create({
   baseURL: BASE_URL,
@@ -10,6 +13,9 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(config => {
   const { method, data } = config;
+  // 从redux中获取之前保存的token，放在请求头中
+  const { token } = store.getState().login;
+  if (token) config.headers.Authorization = 'atguigu_' + token;
   // 判断请求方式
   if (method?.toLowerCase() === 'post') {
     // 若传递过来的参数是对象
@@ -17,12 +23,6 @@ instance.interceptors.request.use(config => {
       config.data = qs.stringify(data);
     }
   }
-  // 1.发送网络请求时, 在界面的中间位置显示Loading的组件
-
-  // 2.某一些请求要求用户必须携带token, 如果没有携带, 那么直接跳转到登录页面
-
-  // 3.params/data序列化的操作
-
   return config;
 });
 
@@ -41,6 +41,9 @@ instance.interceptors.response.use(
           break;
         case 401:
           console.log('未授权访问');
+          message.error('身份校验失败，请重新登录', 1);
+          // token过期 调用store的dispatch 分发一个退出登录的action
+          store.dispatch(signOutAction());
           break;
         default:
           console.log('其他错误信息');

@@ -1,0 +1,38 @@
+.header {
+  height: 80px;
+  background-color: #ffffff;
+  .header-top {
+    height: 40px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #001529;
+    text-align: right;
+    line-height: 40px;
+    .username {
+      margin: 0 20px 0 10px;
+    }
+    .sign-out-btn {
+      margin-right: 20px;
+    }
+  }
+  .header-bottom {
+    height: 40px;
+    line-height: 40px;
+    .header-bottom-left {
+      position: relative;
+      width: 25%;
+      text-align: center;
+      font-size: 16px;
+      &::after {
+        position: absolute;
+        content: '';
+        left: 50%;
+        transform: translateX(-50%);
+        top: 40px;
+        border-top: 20px solid #ffffff;
+        border-bottom: 20px solid transparent;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+      }
+    }
+  }
+}

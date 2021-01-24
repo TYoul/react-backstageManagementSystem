@@ -9,7 +9,7 @@ import './Login.scss';
 
 import { getLoginAction } from '../../redux/login/actions';
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const login = useSelector(state => state.login);
   const { isLogin, msg } = login;
@@ -20,10 +20,9 @@ const Login: React.FC = () => {
     dispatch(getLoginAction(values));
   };
 
-  // 页面初始化，查看是否有token，和有token之后的对应操作
+  // 页面初始化，查看是否登录，和之后的对应操作
   useEffect(() => {
-    const token = window.localStorage.getItem('token');
-    if (token) {
+    if (isLogin) {
       history.push('/');
     } else if (!isLogin && msg) {
       message.error(msg);
@@ -57,4 +56,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

@@ -1,5 +1,9 @@
-import { LOGIN_SUCCESS, LOGIN_FAILURE } from './constants';
+import { LOGIN_SUCCESS, LOGIN_FAILURE, SIGN_OUT } from './constants';
 import { ModifyAction } from './actions';
+
+// 类型断言，localStorage.getItem('user')可能为null | string ，做一下断言
+const user = JSON.parse(localStorage.getItem('user') as string);
+const token = localStorage.getItem('token');
 
 export interface StoreState {
   user: {}; // 用户信息
@@ -9,9 +13,9 @@ export interface StoreState {
 }
 
 const defaultState: StoreState = {
-  user: {},
-  token: '',
-  isLogin: false,
+  user: user || '',
+  token: token || '',
+  isLogin: user && token ? true : false,
   msg: '',
 };
 
@@ -28,6 +32,13 @@ const loginReducer = (state = defaultState, action: ModifyAction) => {
       return {
         ...state,
         msg: action.payload,
+      };
+    case SIGN_OUT:
+      return {
+        ...state,
+        user: '',
+        token: '',
+        isLogin: false,
       };
     default:
       return state;

@@ -1,19 +1,23 @@
-import { LOGIN_SUCCESS, LOGIN_FAILURE } from './constants';
-import { getToken } from '../../services/login';
+import { LOGIN_SUCCESS, LOGIN_FAILURE, SIGN_OUT } from './constants';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../store';
+import { getToken } from '../../services/login';
 
 interface LoginSuccessAction {
   type: typeof LOGIN_SUCCESS;
   payload: any;
 }
 
-interface loginFailureAction {
+interface LoginFailureAction {
   type: typeof LOGIN_FAILURE;
   payload: any;
 }
 
-export type ModifyAction = LoginSuccessAction | loginFailureAction;
+interface SignOutAction {
+  type: typeof SIGN_OUT;
+}
+
+export type ModifyAction = LoginSuccessAction | LoginFailureAction | SignOutAction;
 
 // 登录成功的action
 const loginSuccessAction = (data: any): LoginSuccessAction => ({
@@ -22,7 +26,7 @@ const loginSuccessAction = (data: any): LoginSuccessAction => ({
 });
 
 // 登录失败的action
-const loginFailureAction = (data: any): loginFailureAction => ({
+const loginFailureAction = (data: any): LoginFailureAction => ({
   type: LOGIN_FAILURE,
   payload: data,
 });
@@ -32,10 +36,20 @@ export const getLoginAction = (values: any): ThunkAction<void, RootState, unknow
   const result: any = await getToken(values);
   const { status, data, msg } = result;
   if (status === 0) {
-    const { token } = data;
-    window.localStorage.setItem('token', token);
+    const { token, user } = data;
+    // 将有关登录的信息放到localStorage中
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
     dispatch(loginSuccessAction(data));
   } else if (status === 1) {
     dispatch(loginFailureAction(msg));
   }
+};
+
+export const signOutAction = (): SignOutAction => {
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+  return {
+    type: SIGN_OUT,
+  };
 };
