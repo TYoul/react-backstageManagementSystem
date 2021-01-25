@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { signOutAction } from '../../redux/login/actions';
 import { Button, Modal } from 'antd';
+import dayjs from 'dayjs';
 import './Header.scss';
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [nowTime, setNowTime] = useState('');
+
+  useEffect(() => {
+    const setTimer = setInterval(() => {
+      setNowTime(dayjs().format('YYYY年MM月DD日 HH:mm:ss'));
+    }, 1000);
+    return () => {
+      clearInterval(setTimer);
+    };
+  });
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -37,6 +48,9 @@ const Header: React.FC = () => {
       </div>
       <div className="header-bottom">
         <div className="header-bottom-left">柱状图</div>
+        <div className="header-bottom-right">
+          <span className="header-timer">现在时间：{nowTime}</span>
+        </div>
       </div>
     </header>
   );

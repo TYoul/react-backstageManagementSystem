@@ -19,7 +19,7 @@ import LinePage from '../../pages/line/Line';
 import PiePage from '../../pages/pie/Pie';
 
 // 测试
-import { getCategory } from '../../services/category';
+// import { getCategory } from '../../services/category';
 
 const ContainerPage: React.FC = () => {
   // const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const ContainerPage: React.FC = () => {
         </Content>
         <Footer className="footer">
           React后台管理系统@TYoul
-          <button onClick={e => getCategory()}>点我</button>
+          {/* <button onClick={e => getCategory()}>点我</button> */}
         </Footer>
       </Layout>
     </Layout>

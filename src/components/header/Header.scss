@@ -15,6 +15,7 @@
     }
   }
   .header-bottom {
+    display: flex;
     height: 40px;
     line-height: 40px;
     .header-bottom-left {
@@ -32,6 +33,13 @@
         border-bottom: 20px solid transparent;
         border-left: 20px solid transparent;
         border-right: 20px solid transparent;
+      }
+    }
+    .header-bottom-right {
+      width: 75%;
+      text-align: right;
+      .header-timer {
+        margin-right: 19px;
       }
     }
   }
