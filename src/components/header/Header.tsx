@@ -12,10 +12,12 @@ const Header: React.FC = () => {
   const [nowTime, setNowTime] = useState('');
 
   useEffect(() => {
+    // 定时器，每一秒更新页面的时间
     const setTimer = setInterval(() => {
       setNowTime(dayjs().format('YYYY年MM月DD日 HH:mm:ss'));
     }, 1000);
     return () => {
+      // 清除定时器
       clearInterval(setTimer);
     };
   });
