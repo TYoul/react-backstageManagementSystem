@@ -5,8 +5,10 @@ import { useSelector } from '../../redux/hooks';
 
 import { Layout } from 'antd';
 import './Container.scss';
+import logo from '../../assets/logo.svg';
 
 import Header from '../header/Header';
+import LeftMenu from '../left-menu/LeftMenu';
 
 // 路由组件
 import HomePage from '../../pages/home/Home';
@@ -31,7 +33,13 @@ const ContainerPage: React.FC = () => {
   if (!isLogin) return <Redirect to="/login" />;
   return (
     <Layout className="container-wrap">
-      <Sider className="sider">Sider</Sider>
+      <Sider className="sider">
+        <div>
+          <img src={logo} alt="" className="App-logo" />
+          <h1 className="sider-title">React后台管理</h1>
+        </div>
+        <LeftMenu />
+      </Sider>
       <Layout>
         <Header />
         <Content className="content">

@@ -6,10 +6,11 @@ import dayjs from 'dayjs';
 import './Header.scss';
 
 const Header: React.FC = () => {
+  const [nowTime, setNowTime] = useState('');
+
   const dispatch = useDispatch();
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [nowTime, setNowTime] = useState('');
+  const { confirm } = Modal;
 
   useEffect(() => {
     // 定时器，每一秒更新页面的时间
@@ -22,31 +23,27 @@ const Header: React.FC = () => {
     };
   });
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  // 退出登录
-  const handleOk = () => {
-    dispatch(signOutAction());
-    setIsModalVisible(false);
-  };
-
-  // 不退出登录
-  const handleCancel = () => {
-    setIsModalVisible(false);
+  const showConfirm = () => {
+    confirm({
+      title: '确定退出登录吗?',
+      okText: '确认',
+      cancelText: '取消',
+      onOk() {
+        dispatch(signOutAction());
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
   };
 
   return (
     <header className="header">
       <div className="header-top">
         <span className="username">欢迎，adda</span>
-        <Button className="sign-out-btn" size="small" onClick={showModal}>
+        <Button className="sign-out-btn" size="small" onClick={showConfirm}>
           退出
         </Button>
-        <Modal title="提示" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} okText="确认" cancelText="取消" centered={true}>
-          <p>确认退出登录吗?</p>
-        </Modal>
       </div>
       <div className="header-bottom">
         <div className="header-bottom-left">柱状图</div>

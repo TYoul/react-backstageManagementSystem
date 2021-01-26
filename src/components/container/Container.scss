@@ -1,6 +1,35 @@
 .container-wrap {
   height: 100%;
 
+  .sider {
+    .App-logo {
+      height: 70px;
+      width: 70px;
+      float: left;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+      }
+    }
+
+    @keyframes App-logo-spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .sider-title {
+      color: #ffffff;
+      line-height: 70px;
+      font-size: 18px;
+    }
+  }
+
   .content {
     background-color: #ffffff;
     margin: 20px 20px 0 20px;
