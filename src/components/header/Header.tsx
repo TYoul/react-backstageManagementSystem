@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { signOutAction } from '../../redux/login/actions';
-import { Button, Modal } from 'antd';
-import dayjs from 'dayjs';
-import './Header.scss';
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { signOutAction } from "../../redux/login/actions";
+import { Button, Modal } from "antd";
+import dayjs from "dayjs";
+import "./Header.scss";
 
 const Header: React.FC = () => {
-  const [nowTime, setNowTime] = useState('');
+  const [nowTime, setNowTime] = useState("");
 
   const dispatch = useDispatch();
 
@@ -15,24 +15,24 @@ const Header: React.FC = () => {
   useEffect(() => {
     // 定时器，每一秒更新页面的时间
     const setTimer = setInterval(() => {
-      setNowTime(dayjs().format('YYYY年MM月DD日 HH:mm:ss'));
+      setNowTime(dayjs().format("YYYY年MM月DD日 HH:mm:ss"));
     }, 1000);
     return () => {
-      // 清除定时器
+      // TODO:清除定时器
       clearInterval(setTimer);
     };
   });
 
   const showConfirm = () => {
     confirm({
-      title: '确定退出登录吗?',
-      okText: '确认',
-      cancelText: '取消',
+      title: "确定退出登录吗?",
+      okText: "确认",
+      cancelText: "取消",
       onOk() {
         dispatch(signOutAction());
       },
       onCancel() {
-        console.log('Cancel');
+        console.log("Cancel");
       },
     });
   };

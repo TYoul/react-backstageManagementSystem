@@ -1,31 +1,31 @@
-import React from 'react';
+import React from "react";
 // import { useDispatch } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import { useSelector } from '../../redux/hooks';
+import { Redirect, Route, Switch } from "react-router-dom";
+import { useSelector } from "../../redux/hooks";
 
-import { Layout } from 'antd';
-import './Container.scss';
-import logo from '../../assets/logo.svg';
+import { Layout } from "antd";
+import "./Container.scss";
+import logo from "../../assets/logo.svg";
 
-import Header from '../header/Header';
-import LeftMenu from '../left-menu/LeftMenu';
+import Header from "../header/Header";
+import LeftMenu from "../left-menu/LeftMenu";
 
 // 路由组件
-import HomePage from '../../pages/home/Home';
-import CategoryPage from '../../pages/category/Category';
-import ProductPage from '../../pages/product/Product';
-import UserPage from '../../pages/user/User';
-import RolePage from '../../pages/role/Role';
-import BarPage from '../../pages/bar/Bar';
-import LinePage from '../../pages/line/Line';
-import PiePage from '../../pages/pie/Pie';
+import HomePage from "../../pages/home/Home";
+import CategoryPage from "../../pages/category/Category";
+import ProductPage from "../../pages/product/Product";
+import UserPage from "../../pages/user/User";
+import RolePage from "../../pages/role/Role";
+import BarPage from "../../pages/bar/Bar";
+import LinePage from "../../pages/line/Line";
+import PiePage from "../../pages/pie/Pie";
 
 // 测试
 // import { getCategory } from '../../services/category';
 
 const ContainerPage: React.FC = () => {
   // const dispatch = useDispatch();
-  const login = useSelector(state => state.login);
+  const login = useSelector((state) => state.login);
   const { isLogin } = login;
 
   const { Footer, Sider, Content } = Layout;
@@ -52,6 +52,7 @@ const ContainerPage: React.FC = () => {
             <Route path="/charts/bar" component={BarPage} />
             <Route path="/charts/line" component={LinePage} />
             <Route path="/charts/pie" component={PiePage} />
+            {/* TODO:redirect要写在有"/home"的组件内，不然不会有效果 */}
             <Redirect to="/home" />
           </Switch>
         </Content>

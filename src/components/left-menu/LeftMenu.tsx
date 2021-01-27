@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import "./LeftMenu.scss";
 import menuList from "./menu-config";
@@ -13,6 +13,7 @@ const LeftMenu: React.FC = () => {
     history.replace(path);
   };
 
+  // 用于菜单获取的函数
   const getMenuItem = (menuList: any) => {
     return menuList.map((menu: any) =>
       menu.children ? (
@@ -31,9 +32,20 @@ const LeftMenu: React.FC = () => {
     );
   };
 
+  // TODO：对页面刷新做了侧边栏数据回显的操作，通过路由来确定侧边栏选中的标签
   return (
     <div className="sider-container">
-      <Menu defaultSelectedKeys={["home"]} mode="inline" theme="dark">
+      <Menu
+        // TODO:默认选中
+        defaultSelectedKeys={[
+          history.location.pathname.split("/")[2] ||
+            history.location.pathname.split("/")[1],
+        ]}
+        // TODO:默认打开
+        defaultOpenKeys={history.location.pathname.split("/").splice(1, 2)}
+        mode="inline"
+        theme="dark"
+      >
         {getMenuItem(menuList)}
       </Menu>
     </div>

@@ -21,7 +21,7 @@ const menuList = [
   },
   {
     title: "商品",
-    key: "prod_about",
+    key: "prod",
     icon: <AppstoreOutlined />,
     children: [
       // 子菜单列表
