@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "../../redux/hooks";
 import { useHistory } from "react-router-dom";
@@ -10,23 +10,13 @@ import menuList from "../left-menu/menu-config";
 
 const Header: React.FC = () => {
   const [nowTime, setNowTime] = useState("");
+  const [title, setTitle] = useState("");
   const history = useHistory();
   const username = useSelector((state) => state.login.user.username);
 
   const dispatch = useDispatch();
 
   const { confirm } = Modal;
-
-  useEffect(() => {
-    // 定时器，每一秒更新页面的时间
-    const setTimer = setInterval(() => {
-      setNowTime(dayjs().format("YYYY年MM月DD日 HH:mm:ss"));
-    }, 1000);
-    return () => {
-      // TODO:清除定时器
-      clearInterval(setTimer);
-    };
-  }, []);
 
   const showConfirm = () => {
     confirm({
@@ -42,8 +32,9 @@ const Header: React.FC = () => {
     });
   };
 
-  // TODO:根据路由和侧边栏数据来动态获取每块内容的头部标题
-  const getTitle = () => {
+  // TODO:根据路由和侧边栏数据来动态获取每块内容的头部标题,
+  // 由于定时器会导致组件的时间更新，所以这个组件会一直render，将getTitle函数放到useCallback中，防止其多次调用
+  const getTitle = useCallback(() => {
     const pathKey = history.location.pathname.split("/").reverse()[0];
     let title = "";
     menuList.forEach((item: any) => {
@@ -57,7 +48,19 @@ const Header: React.FC = () => {
       }
     });
     return title;
-  };
+  }, [history.location.pathname]);
+
+  useEffect(() => {
+    // 定时器，每一秒更新页面的时间
+    const setTimer = setInterval(() => {
+      setNowTime(dayjs().format("YYYY年MM月DD日 HH:mm:ss"));
+    }, 1000);
+    setTitle(getTitle());
+    return () => {
+      // TODO:清除定时器
+      clearInterval(setTimer);
+    };
+  }, [getTitle]);
 
   return (
     <header className="header">
@@ -72,7 +75,7 @@ const Header: React.FC = () => {
         </Button>
       </div>
       <div className="header-bottom">
-        <div className="header-bottom-left">{getTitle()}</div>
+        <div className="header-bottom-left">{title}</div>
         <div className="header-bottom-right">
           <span className="header-timer">现在时间：{nowTime}</span>
         </div>
