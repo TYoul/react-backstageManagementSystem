@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import "./LeftMenu.scss";
 import menuList from "./menu-config";
@@ -36,10 +36,9 @@ const LeftMenu: React.FC = () => {
   return (
     <div className="sider-container">
       <Menu
-        // TODO:默认选中
+        // TODO:默认选中 reverse是要选取数组的最后一个元素
         defaultSelectedKeys={[
-          history.location.pathname.split("/")[2] ||
-            history.location.pathname.split("/")[1],
+          history.location.pathname.split("/").reverse()[0],
         ]}
         // TODO:默认打开
         defaultOpenKeys={history.location.pathname.split("/").splice(1, 2)}
