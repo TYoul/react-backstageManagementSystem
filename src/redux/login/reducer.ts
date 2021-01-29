@@ -5,7 +5,7 @@ import { ModifyAction } from './actions';
 const user = JSON.parse(localStorage.getItem('user') as string);
 const token = localStorage.getItem('token');
 
-export interface StoreState {
+interface StoreState {
   user: {}; // 用户信息
   token: string; // 用来登录验证的token
   isLogin: boolean; // 是否是登录状态

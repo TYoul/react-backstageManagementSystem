@@ -36,9 +36,9 @@ const LeftMenu: React.FC = () => {
   return (
     <div className="sider-container">
       <Menu
-        // TODO:默认选中 reverse是要选取数组的最后一个元素
+        // TODO:默认选中 reverse是要选取数组的最后一个元素，当url是localhost:3000时，默认选择/home，路由在container做了处理
         defaultSelectedKeys={[
-          history.location.pathname.split("/").reverse()[0],
+          history.location.pathname.split("/").reverse()[0] || "home",
         ]}
         // TODO:默认打开
         defaultOpenKeys={history.location.pathname.split("/").splice(1, 2)}

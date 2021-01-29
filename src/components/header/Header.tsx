@@ -34,6 +34,7 @@ const Header: React.FC = () => {
 
   // TODO:根据路由和侧边栏数据来动态获取每块内容的头部标题,
   // 由于定时器会导致组件的时间更新，所以这个组件会一直render，将getTitle函数放到useCallback中，防止其多次调用
+  // TODO:另一种方法：利用redux，当点击侧边栏菜单时，将对应的数据放到redux中，在这边取出来。但是放在ComponentDidMount取出来，为了刷新的时候有数据，没刷新，从redux中拿，刷新从自身拿
   const getTitle = useCallback(() => {
     const pathKey = history.location.pathname.split("/").reverse()[0];
     let title = "";

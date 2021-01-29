@@ -1,8 +1,9 @@
-import request from './request';
+import request from "./request";
 
-export const getCategory = () => {
+// 获取分类列表数据
+export const getCategoryList = () => {
   return request({
-    url: '/manage/category/list',
-    method: 'GET',
+    url: "/manage/category/list",
+    method: "GET",
   });
 };
