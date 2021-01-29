@@ -1,5 +1,5 @@
 import React from "react";
-// import { useDispatch } from 'react-redux';
+import { shallowEqual } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { useSelector } from "../../redux/hooks";
 
@@ -25,7 +25,7 @@ import PiePage from "../../pages/pie/Pie";
 
 const ContainerPage: React.FC = () => {
   // const dispatch = useDispatch();
-  const login = useSelector((state) => state.login);
+  const login = useSelector((state) => state.login, shallowEqual);
   const { isLogin } = login;
 
   const { Footer, Sider, Content } = Layout;

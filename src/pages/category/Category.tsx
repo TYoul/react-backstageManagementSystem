@@ -16,7 +16,6 @@ const CategoryPage: React.FC = () => {
     (state) => state.category.categoryList,
     shallowEqual
   );
-  console.log(categoryList);
 
   // 在redux中进行网络请求
   useEffect(() => {

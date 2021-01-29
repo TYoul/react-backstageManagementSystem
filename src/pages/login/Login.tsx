@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, shallowEqual } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
@@ -11,7 +11,7 @@ import { getLoginAction } from "../../redux/login/actions";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
-  const login = useSelector((state) => state.login);
+  const login = useSelector((state) => state.login, shallowEqual);
   const { isLogin, msg } = login;
   const history = useHistory();
 

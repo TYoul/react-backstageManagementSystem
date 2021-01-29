@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,shallowEqual } from "react-redux";
 import { useSelector } from "../../redux/hooks";
 import { useHistory } from "react-router-dom";
 import { signOutAction } from "../../redux/login/actions";
@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   const [nowTime, setNowTime] = useState("");
   const [title, setTitle] = useState("");
   const history = useHistory();
-  const username = useSelector((state) => state.login.user.username);
+  const username = useSelector((state) => state.login.user.username,shallowEqual);
 
   const dispatch = useDispatch();
 
