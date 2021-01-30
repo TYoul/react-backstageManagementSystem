@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, shallowEqual } from "react-redux";
 import { useSelector } from "../../redux/hooks";
-import { Button, Card, Table, Modal, Form, Input } from "antd";
+import { Button, Card, Table, Modal, Form, Input, message } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { PAGE_SIZE } from "../../config";
 
-import { getCategoryListAction } from "../../redux/category/actions";
+import {
+  getCategoryListAction,
+  addCategoryAction,
+  updateCategoryAction,
+  changeModalAction,
+} from "../../redux/category/actions";
 
 const CategoryPage: React.FC = () => {
   // redux hook
@@ -16,9 +21,12 @@ const CategoryPage: React.FC = () => {
     (state) => state.category.categoryList,
     shallowEqual
   );
+  const isModalVisible = useSelector(
+    (state) => state.category.isModalVisible,
+    shallowEqual
+  );
 
   // 弹窗是否显示的变量:isModalVisible
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [form] = Form.useForm();
 
@@ -29,22 +37,31 @@ const CategoryPage: React.FC = () => {
 
   // 弹窗显示
   const showModal = (key: any) => {
-    setIsModalVisible(true);
+    dispatch(changeModalAction(true));
   };
 
-  const handleOk = () => {
-    if (modalTitle === "修改分类") {
-      console.log("你要修改");
-    } else {
-      console.log("你要添加");
+  const handleOk = async () => {
+    try {
+      const values = await form.validateFields();
+
+      if (modalTitle === "修改分类") {
+        // dispatch(updateCategoryAction(categoryId,categoryName))
+        console.log("你要修改");
+      } else {
+        dispatch(addCategoryAction(values.operation));
+        console.log("你要添加");
+      }
+    } catch (error) {
+      console.log(error);
+      message.warning("表单输入有误，请检查", 1);
+      return;
     }
     form.resetFields();
-    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
     form.resetFields();
-    setIsModalVisible(false);
+    dispatch(changeModalAction(false));
   };
 
   // table columns数据
@@ -122,9 +139,19 @@ const CategoryPage: React.FC = () => {
                 required: true,
                 message: "分类名称必须输入",
               },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("operation") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    "The two passwords that you entered do not match!"
+                  );
+                },
+              }),
             ]}
           >
-            <Input placeholder="分类名必须输入" />
+            <Input placeholder="请输入分类名称" />
           </Form.Item>
         </Form>
       </Modal>

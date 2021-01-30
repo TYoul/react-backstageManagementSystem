@@ -7,3 +7,21 @@ export const getCategoryList = () => {
     method: "GET",
   });
 };
+
+// 添加分类
+export const addCategory = (categoryName:string) => {
+  return request({
+    url:"/manage/category/add",
+    method:"POST",
+    data:{categoryName}
+  })
+}
+
+// 更新分类
+export const updateCategory = (categoryId:string,categoryName:string) => {
+  return request({
+    url:'/manage/category/update',
+    method:'POST',
+    data:{categoryId,categoryName}
+  })
+}

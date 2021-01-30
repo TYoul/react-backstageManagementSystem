@@ -1,7 +1,19 @@
-import { CATEGORY_LIST_SUCCESS, CATEGORY_LIST_FAILURE } from "./constants";
+import {
+  CATEGORY_LIST_SUCCESS,
+  CATEGORY_LIST_FAILURE,
+  ADD_CATEGORY_SUCCESS,
+  ADD_CATEGORY_FAILURE,
+  UPDATE_CATEGORY_SUCCESS,
+  UPDATE_CATEGORY_FAILURE,
+  CHANGE_MODAL,
+} from "./constants";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../store";
-import { getCategoryList } from "../../services/category";
+import {
+  getCategoryList,
+  addCategory,
+  updateCategory,
+} from "../../services/category";
 import { message } from "antd";
 
 interface CategoryListSuccessAction {
@@ -14,12 +26,60 @@ interface CategoryListFailureAction {
   payload: any;
 }
 
+interface AddCategorySuccessAction {
+  type: typeof ADD_CATEGORY_SUCCESS;
+  payload: any;
+}
+
+interface AddCategoryFailureAction {
+  type: typeof ADD_CATEGORY_FAILURE;
+  payload: any;
+}
+
+interface UpdateCategorySuccessAction {
+  type: typeof UPDATE_CATEGORY_SUCCESS;
+  payload: any;
+}
+
+interface UpdateCategoryFailureAction {
+  type: typeof UPDATE_CATEGORY_FAILURE;
+  payload: any;
+}
+
+interface ChangeModalAction {
+  type: typeof CHANGE_MODAL;
+  payload: boolean;
+}
+
 export type ModifyAction =
   | CategoryListSuccessAction
-  | CategoryListFailureAction;
+  | CategoryListFailureAction
+  | AddCategorySuccessAction
+  | AddCategoryFailureAction
+  | UpdateCategorySuccessAction
+  | UpdateCategoryFailureAction
+  | ChangeModalAction;
 
 const categoryListSuccessAction = (data: any): CategoryListSuccessAction => ({
   type: CATEGORY_LIST_SUCCESS,
+  payload: data,
+});
+
+const addCategorySuccessAction = (data: any): AddCategorySuccessAction => ({
+  type: ADD_CATEGORY_SUCCESS,
+  payload: data,
+});
+
+const updateCategorySuccessAction = (
+  data: any
+): UpdateCategorySuccessAction => ({
+  type: UPDATE_CATEGORY_SUCCESS,
+  payload: data,
+});
+
+// 分类页面的弹窗显示
+export const changeModalAction = (data: boolean): ChangeModalAction => ({
+  type: CHANGE_MODAL,
   payload: data,
 });
 
@@ -29,7 +89,7 @@ export const getCategoryListAction = (): ThunkAction<
   RootState,
   unknown,
   ModifyAction
-> => async (dispatch, getState) => {
+> => async (dispatch) => {
   const result: any = await getCategoryList();
   let { status, data, msg } = result;
   if (status === 0) {
@@ -37,4 +97,28 @@ export const getCategoryListAction = (): ThunkAction<
   } else if (status === 1) {
     message.error(msg, 1);
   }
+};
+
+// 添加分类数据的action
+export const addCategoryAction = (
+  values: string
+): ThunkAction<void, RootState, unknown, ModifyAction> => async (dispatch) => {
+  const result: any = await addCategory(values);
+  const { status, data, msg } = result;
+  if (status === 0) {
+    dispatch(addCategorySuccessAction(data));
+    message.success("新增商品分类成功", 1);
+  } else {
+    dispatch(changeModalAction(true));
+    message.error(msg, 1);
+  }
+};
+
+// 更新分类数据的action
+export const updateCategoryAction = (
+  categoryId: string,
+  categoryName: string
+): ThunkAction<void, RootState, unknown, ModifyAction> => async (dispatch) => {
+  const result: any = await updateCategory(categoryId, categoryName);
+  debugger;
 };
