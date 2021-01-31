@@ -9,19 +9,25 @@ export const getCategoryList = () => {
 };
 
 // 添加分类
-export const addCategory = (categoryName:string) => {
+export const addCategory = (categoryName: string) => {
   return request({
-    url:"/manage/category/add",
-    method:"POST",
-    data:{categoryName}
-  })
-}
+    url: "/manage/category/add",
+    method: "POST",
+    data: { categoryName },
+  });
+};
 
 // 更新分类
-export const updateCategory = (categoryId:string,categoryName:string) => {
+export const updateCategory = ({
+  categoryId,
+  categoryName,
+}: {
+  categoryId: string;
+  categoryName: string;
+}) => {
   return request({
-    url:'/manage/category/update',
-    method:'POST',
-    data:{categoryId,categoryName}
-  })
-}
+    url: "/manage/category/update",
+    method: "POST",
+    data: { categoryId, categoryName },
+  });
+};

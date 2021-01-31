@@ -115,10 +115,18 @@ export const addCategoryAction = (
 };
 
 // 更新分类数据的action
-export const updateCategoryAction = (
-  categoryId: string,
-  categoryName: string
-): ThunkAction<void, RootState, unknown, ModifyAction> => async (dispatch) => {
-  const result: any = await updateCategory(categoryId, categoryName);
-  debugger;
+export const updateCategoryAction = ({
+  categoryId,
+  categoryName,
+}: {
+  categoryId: string;
+  categoryName: string;
+}): ThunkAction<void, RootState, unknown, ModifyAction> => async (dispatch) => {
+  const result: any = await updateCategory({ categoryId, categoryName });
+  const { status, msg } = result;
+  if (status === 0) {
+    const category = { _id: categoryId, name: categoryName };
+    dispatch(updateCategorySuccessAction(category));
+    message.success("修改商品分类成功", 1);
+  }
 };

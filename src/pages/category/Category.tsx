@@ -25,9 +25,18 @@ const CategoryPage: React.FC = () => {
     (state) => state.category.isModalVisible,
     shallowEqual
   );
+  const isLoading = useSelector(
+    (state) => state.category.isLoading,
+    shallowEqual
+  );
 
-  // 弹窗是否显示的变量:isModalVisible
+  // 弹窗的标题
   const [modalTitle, setModalTitle] = useState("");
+  // 弹窗input值，只在修改分类的弹窗里面有
+  const [modalCurrentOperation, setModalCurrentOperation] = useState({
+    name: "",
+    _id: "",
+  });
   const [form] = Form.useForm();
 
   // 在redux中进行网络请求，获取商品分类列表
@@ -36,27 +45,35 @@ const CategoryPage: React.FC = () => {
   }, [dispatch]);
 
   // 弹窗显示
-  const showModal = (key: any) => {
+  const showModal = (item?: any) => {
+    if (item) {
+      const { name } = item;
+      setModalCurrentOperation(item);
+      // TODO:当选择修改分类时，用antd的setFieldsValue设置input的默认值
+      form.setFieldsValue({
+        operation: name,
+      });
+    }
     dispatch(changeModalAction(true));
   };
 
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-
       if (modalTitle === "修改分类") {
-        // dispatch(updateCategoryAction(categoryId,categoryName))
-        console.log("你要修改");
+        const { _id } = modalCurrentOperation;
+        const { operation } = values;
+        dispatch(
+          updateCategoryAction({ categoryId: _id, categoryName: operation })
+        );
       } else {
         dispatch(addCategoryAction(values.operation));
-        console.log("你要添加");
+        form.resetFields();
       }
     } catch (error) {
-      console.log(error);
       message.warning("表单输入有误，请检查", 1);
       return;
     }
-    form.resetFields();
   };
 
   const handleCancel = () => {
@@ -74,15 +91,15 @@ const CategoryPage: React.FC = () => {
     {
       key: "operation",
       title: "操作",
-      dataIndex: "name",
-      render: (name) => {
+      // dataIndex: "key",
+      render: (item) => {
         return (
           <>
             <Button
               type="link"
               onClick={(e) => {
                 setModalTitle("修改分类");
-                showModal(name);
+                showModal(item);
               }}
             >
               修改分类
@@ -106,7 +123,7 @@ const CategoryPage: React.FC = () => {
             type="primary"
             onClick={(e) => {
               setModalTitle("添加分类");
-              showModal(e);
+              showModal();
             }}
           >
             <PlusOutlined />
@@ -119,8 +136,9 @@ const CategoryPage: React.FC = () => {
           dataSource={data}
           bordered
           rowKey="_id"
-          pagination={{ pageSize: PAGE_SIZE }}
+          pagination={{ pageSize: PAGE_SIZE, showQuickJumper: true }}
           scroll={{ y: "calc(100vh - 557px)" }}
+          loading={isLoading}
         />
       </Card>
       <Modal
@@ -139,16 +157,6 @@ const CategoryPage: React.FC = () => {
                 required: true,
                 message: "分类名称必须输入",
               },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("operation") === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    "The two passwords that you entered do not match!"
-                  );
-                },
-              }),
             ]}
           >
             <Input placeholder="请输入分类名称" />
