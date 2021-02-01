@@ -123,7 +123,7 @@ export const updateCategoryAction = ({
   categoryName: string;
 }): ThunkAction<void, RootState, unknown, ModifyAction> => async (dispatch) => {
   const result: any = await updateCategory({ categoryId, categoryName });
-  const { status, msg } = result;
+  const { status } = result;
   if (status === 0) {
     const category = { _id: categoryId, name: categoryName };
     dispatch(updateCategorySuccessAction(category));

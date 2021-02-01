@@ -37,7 +37,9 @@ const LeftMenu: React.FC = () => {
     <div className="sider-container">
       <Menu
         // TODO:默认选中 reverse是要选取数组的最后一个元素，当url是localhost:3000时，默认选择/home，路由在container做了处理
-        defaultSelectedKeys={[
+        // TODO:defaultSelectedKeys只能设置一次，不加可以设置多次，以最后一次为主，
+        // 在这里设置为defaultSelectedKeys的话，在login.tsx那里history.push("/home")，防止登录进来没有默认选中
+        selectedKeys={[
           history.location.pathname.split("/").reverse()[0] || "home",
         ]}
         // TODO:默认打开

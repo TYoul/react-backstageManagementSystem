@@ -44,43 +44,6 @@ const CategoryPage: React.FC = () => {
     dispatch(getCategoryListAction());
   }, [dispatch]);
 
-  // 弹窗显示
-  const showModal = (item?: any) => {
-    if (item) {
-      const { name } = item;
-      setModalCurrentOperation(item);
-      // TODO:当选择修改分类时，用antd的setFieldsValue设置input的默认值
-      form.setFieldsValue({
-        operation: name,
-      });
-    }
-    dispatch(changeModalAction(true));
-  };
-
-  const handleOk = async () => {
-    try {
-      const values = await form.validateFields();
-      if (modalTitle === "修改分类") {
-        const { _id } = modalCurrentOperation;
-        const { operation } = values;
-        dispatch(
-          updateCategoryAction({ categoryId: _id, categoryName: operation })
-        );
-      } else {
-        dispatch(addCategoryAction(values.operation));
-        form.resetFields();
-      }
-    } catch (error) {
-      message.warning("表单输入有误，请检查", 1);
-      return;
-    }
-  };
-
-  const handleCancel = () => {
-    form.resetFields();
-    dispatch(changeModalAction(false));
-  };
-
   // table columns数据
   const columns: ColumnsType = [
     {
@@ -115,6 +78,45 @@ const CategoryPage: React.FC = () => {
   // table 数据
   const data: any[] = categoryList;
 
+  // 弹窗显示
+  const showModal = (item?: any) => {
+    if (item) {
+      const { name } = item;
+      setModalCurrentOperation(item);
+      // TODO:当选择修改分类时，用antd的setFieldsValue设置input的默认值
+      form.setFieldsValue({
+        operation: name,
+      });
+    }
+    dispatch(changeModalAction(true));
+  };
+
+  // 弹窗确定
+  const handleOk = async () => {
+    try {
+      const values = await form.validateFields();
+      if (modalTitle === "修改分类") {
+        const { _id } = modalCurrentOperation;
+        const { operation } = values;
+        dispatch(
+          updateCategoryAction({ categoryId: _id, categoryName: operation })
+        );
+      } else {
+        dispatch(addCategoryAction(values.operation));
+        form.resetFields();
+      }
+    } catch (error) {
+      message.warning("表单输入有误，请检查", 1);
+      return;
+    }
+  };
+
+  // 弹窗取消
+  const handleCancel = () => {
+    form.resetFields();
+    dispatch(changeModalAction(false));
+  };
+
   return (
     <>
       <Card
@@ -127,7 +129,7 @@ const CategoryPage: React.FC = () => {
             }}
           >
             <PlusOutlined />
-            添加
+            添加分类
           </Button>
         }
       >

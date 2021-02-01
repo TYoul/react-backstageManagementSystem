@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
   useEffect(() => {
     if (isLogin) {
       // TODO:登录时，跳转到home页面，侧边栏默认选中首页
-      history.push("/home");
+      history.push("/");
     } else if (!isLogin && msg) {
       message.error(msg);
     }
