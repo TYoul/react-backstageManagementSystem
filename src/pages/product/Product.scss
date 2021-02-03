@@ -5,6 +5,8 @@
 }
 .product-status {
   display: flex;
+  justify-content: center;
+  min-width: 110px;
   line-height: 32px;
 }
 .product-operation {

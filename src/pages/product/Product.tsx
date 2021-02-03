@@ -1,22 +1,26 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, shallowEqual } from "react-redux";
 import { useSelector } from "../../redux/hooks";
 import { Card, Button, Select, Input, Table } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 import "./Product.scss";
 import { PAGE_SIZE } from "../../config";
-import { getProductAction } from "../../redux/product/actions";
+import {
+  getProductAction,
+  updateStatusAction,
+  updateSearchTypeAction,
+  updateSearchValueAction,
+} from "../../redux/product/actions";
 
 const { Option } = Select;
 
 const ProductPage: React.FC = () => {
   // redux hooks
   const dispatch = useDispatch();
+  const keyWord = useSelector((state) => state.product.keyWord);
   const productList = useSelector((state) => state.product.productList);
-  console.log(productList);
-  const { list, total, status } = productList;
-
+  const { list, total } = productList;
   const dataSource = list;
 
   const columns: ColumnsType<any> = [
@@ -41,15 +45,26 @@ const ProductPage: React.FC = () => {
     },
     {
       title: "状态",
-      dataIndex: "status",
       key: "status",
-      render: (status: number) => {
+      render: (item) => {
+        const { status } = item;
         return (
           <div className="product-status">
-            <Button type="link" onClick={() => {}}>
+            <div>{status === 1 ? "在售" : "已停售"}</div>
+            <Button
+              type="link"
+              danger={status === 1 ? true : false}
+              onClick={() => {
+                dispatch(
+                  updateStatusAction({
+                    productId: item._id,
+                    status: status === 1 ? 2 : 1,
+                  })
+                );
+              }}
+            >
               {status === 1 ? "下架" : "上架"}
             </Button>
-            <div>{status}</div>
           </div>
         );
       },
@@ -77,7 +92,6 @@ const ProductPage: React.FC = () => {
     dispatch(getProductAction({ pageNum: 1, pageSize: PAGE_SIZE }));
   }, [dispatch]);
 
-  const handleChange = () => {};
   return (
     <Card
       title={
@@ -85,12 +99,19 @@ const ProductPage: React.FC = () => {
           <Select
             defaultValue="name"
             style={{ width: 120 }}
-            onChange={handleChange}
+            onChange={(value) => {
+              dispatch(updateSearchTypeAction(value));
+            }}
           >
             <Option value="name">按名称搜索</Option>
             <Option value="desc">按描述搜索</Option>
           </Select>
-          <Input placeholder="关键字" className="product-input" />
+          <Input
+            placeholder="关键字"
+            className="product-input"
+            value={keyWord}
+            onChange={(e) => dispatch(updateSearchValueAction(e.target.value))}
+          />
           <Button type="primary">搜索</Button>
         </div>
       }
@@ -103,7 +124,15 @@ const ProductPage: React.FC = () => {
     >
       <Table
         rowKey="_id"
-        pagination={{ total: total }}
+        pagination={{
+          total: total,
+          pageSize: PAGE_SIZE,
+          onChange: (page, pageSize) => {
+            dispatch(
+              getProductAction({ pageNum: page, pageSize: pageSize as number })
+            );
+          },
+        }}
         bordered
         columns={columns}
         dataSource={dataSource}

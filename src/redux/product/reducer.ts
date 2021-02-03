@@ -1,4 +1,9 @@
-import { PRODUCT_SUCCESS } from "./constants";
+import {
+  PRODUCT_SUCCESS,
+  UPDATESTATUS_SUCCESS,
+  UPDATESEARCHTYPE,
+  UPDATESEARCHVALUE,
+} from "./constants";
 import { ModifyAction } from "./actions";
 
 interface StoreState {
@@ -7,22 +12,22 @@ interface StoreState {
     total: number;
     pages: number;
     pageSize: number;
-    list: {
-      status: number;
-      imgs: string[];
-      _id: string;
-      name: string;
-      desc: string;
-      price: number;
-      categoryId: string;
-      detail: string;
-      __v: number;
-    }[];
-  }[];
+    list: any;
+  };
+  keyWord: string;
+  searchType: string;
 }
 
 const defaultState: StoreState = {
-  productList: [],
+  productList: {
+    pageNum: 0,
+    total: 0,
+    pages: 0,
+    pageSize: 0,
+    list: [],
+  },
+  keyWord: "", // 搜索关键字
+  searchType: "name", // 搜索类型 name：是按名称搜索； desc：按描述搜索
 };
 
 const productReducer = (state = defaultState, action: ModifyAction) => {
@@ -31,6 +36,32 @@ const productReducer = (state = defaultState, action: ModifyAction) => {
       return {
         ...state,
         productList: action.payload,
+      };
+    case UPDATESTATUS_SUCCESS:
+      return {
+        ...state,
+        productList: {
+          ...state.productList,
+          list: state.productList.list.map((item: any) => {
+            if (item._id === action.payload.productId) {
+              item.status = action.payload.status;
+              return item;
+            } else {
+              return item;
+            }
+          }),
+        },
+      };
+    case UPDATESEARCHTYPE:
+      return {
+        ...state,
+        searchType: action.payload,
+        keyWord: "",
+      };
+    case UPDATESEARCHVALUE:
+      return {
+        ...state,
+        keyWord: action.payload,
       };
     default:
       return state;

@@ -17,3 +17,20 @@ export const getProductList = ({
     },
   });
 };
+
+// 更新商品状态
+export const updateStatus = ({
+  productId,status
+}:{
+  productId:string;
+  status:number
+}) => {
+  return request({
+    url:"/manage/product/updateStatus",
+    method:"POST",
+    data:{
+      productId,
+      status
+    }
+  })
+}
