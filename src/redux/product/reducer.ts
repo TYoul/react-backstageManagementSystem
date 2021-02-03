@@ -3,6 +3,7 @@ import {
   UPDATESTATUS_SUCCESS,
   UPDATESEARCHTYPE,
   UPDATESEARCHVALUE,
+  UPDATESEARCHLIST,
 } from "./constants";
 import { ModifyAction } from "./actions";
 
@@ -27,7 +28,7 @@ const defaultState: StoreState = {
     list: [],
   },
   keyWord: "", // 搜索关键字
-  searchType: "name", // 搜索类型 name：是按名称搜索； desc：按描述搜索
+  searchType: "productName", // 搜索类型 productName：是按名称搜索； productDesc：按描述搜索
 };
 
 const productReducer = (state = defaultState, action: ModifyAction) => {
@@ -62,6 +63,17 @@ const productReducer = (state = defaultState, action: ModifyAction) => {
       return {
         ...state,
         keyWord: action.payload,
+      };
+    case UPDATESEARCHLIST:
+      return {
+        ...state,
+        productList: {
+          ...state.productList,
+          pageNum: action.payload.pageNum,
+          total: action.payload.total,
+          pageSize: action.payload.pageSize,
+          list: action.payload.list,
+        },
       };
     default:
       return state;

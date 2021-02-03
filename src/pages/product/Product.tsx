@@ -11,6 +11,7 @@ import {
   updateStatusAction,
   updateSearchTypeAction,
   updateSearchValueAction,
+  updateSearchListAction,
 } from "../../redux/product/actions";
 
 const { Option } = Select;
@@ -19,8 +20,9 @@ const ProductPage: React.FC = () => {
   // redux hooks
   const dispatch = useDispatch();
   const keyWord = useSelector((state) => state.product.keyWord);
+  const searchType = useSelector((state) => state.product.searchType);
   const productList = useSelector((state) => state.product.productList);
-  const { list, total } = productList;
+  const { list, total, pageNum, pageSize } = productList;
   const dataSource = list;
 
   const columns: ColumnsType<any> = [
@@ -97,14 +99,14 @@ const ProductPage: React.FC = () => {
       title={
         <div>
           <Select
-            defaultValue="name"
+            defaultValue="productName"
             style={{ width: 120 }}
-            onChange={(value) => {
+            onChange={(value, option) => {
               dispatch(updateSearchTypeAction(value));
             }}
           >
-            <Option value="name">按名称搜索</Option>
-            <Option value="desc">按描述搜索</Option>
+            <Option value="productName">按名称搜索</Option>
+            <Option value="productDesc">按描述搜索</Option>
           </Select>
           <Input
             placeholder="关键字"
@@ -112,7 +114,21 @@ const ProductPage: React.FC = () => {
             value={keyWord}
             onChange={(e) => dispatch(updateSearchValueAction(e.target.value))}
           />
-          <Button type="primary">搜索</Button>
+          <Button
+            type="primary"
+            onClick={(e) => {
+              dispatch(
+                updateSearchListAction({
+                  searchType,
+                  keyWord,
+                  pageNum,
+                  pageSize,
+                })
+              );
+            }}
+          >
+            搜索
+          </Button>
         </div>
       }
       extra={
