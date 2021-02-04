@@ -139,7 +139,6 @@ const CategoryPage: React.FC = () => {
           bordered
           rowKey="_id"
           pagination={{ pageSize: PAGE_SIZE, showQuickJumper: true }}
-          scroll={{ y: "calc(100vh - 557px)" }}
           loading={isLoading}
         />
       </Card>

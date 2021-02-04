@@ -5,6 +5,9 @@
 .product-list {
   justify-content: flex-start !important;
   .product-name {
+    display: block;
+    min-width: 95px;
+    white-space: nowrap;
     font-size: 20px;
     font-weight: bold;
   }

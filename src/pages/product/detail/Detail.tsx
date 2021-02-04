@@ -28,6 +28,10 @@ const DetailPage: React.FC = () => {
   const localtion: localtion = useLocation();
   const { name, desc, price, imgs, detail } = localtion.state;
 
+  const createDetail= () => {
+    return {__html:detail}
+  }
+
   return (
     <Card
       title={
@@ -57,15 +61,15 @@ const DetailPage: React.FC = () => {
         </List.Item>
         <List.Item className="product-list">
           <span className="product-name">商品价格：</span>
-          <span>{price}</span>
+          <span>￥：{price}</span>
         </List.Item>
         <List.Item className="product-list">
           <span className="product-name">商品图片：</span>
-          <span>{imgs[0]}</span>
+          <img src={`/upload/${imgs[0]}`} alt="商品图片" />
         </List.Item>
         <List.Item className="product-list">
           <span className="product-name">商品详情：</span>
-          <span>{detail}</span>
+          <span dangerouslySetInnerHTML={createDetail()}></span>
         </List.Item>
       </List>
     </Card>

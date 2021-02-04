@@ -118,10 +118,10 @@ const ProductPage: React.FC = () => {
   ];
 
   useEffect(() => {
-    if(isRest){
+    if (isRest || list.length===0) {
       dispatch(getProductAction({ pageNum: 1, pageSize: PAGE_SIZE }));
     }
-  }, [dispatch,isRest]);
+  }, [dispatch, isRest]);
 
   return (
     <Card
