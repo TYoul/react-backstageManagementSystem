@@ -31,8 +31,7 @@ const ContainerPage: React.FC = () => {
   if (!isLogin) return <Redirect to="/login" />;
   return (
     <Layout className="container-wrap">
-    <Layout>
-<Sider className="sider">
+      <Sider className="sider">
         <div>
           <img src={logo} alt="" className="App-logo" />
           <h1 className="sider-title">React后台管理</h1>
@@ -67,8 +66,6 @@ const ContainerPage: React.FC = () => {
         </Content>
         <Footer className="footer">React后台管理系统@zhou_xu</Footer>
       </Layout>
-    </Layout>
-      
     </Layout>
   );
 };

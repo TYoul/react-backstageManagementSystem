@@ -28,9 +28,9 @@ const DetailPage: React.FC = () => {
   const localtion: localtion = useLocation();
   const { name, desc, price, imgs, detail } = localtion.state;
 
-  const createDetail= () => {
-    return {__html:detail}
-  }
+  const createDetail = () => {
+    return { __html: detail };
+  };
 
   return (
     <Card
