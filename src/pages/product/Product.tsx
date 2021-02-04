@@ -19,9 +19,16 @@ const { Option } = Select;
 const ProductPage: React.FC = () => {
   // redux hooks
   const dispatch = useDispatch();
-  const keyWord = useSelector((state) => state.product.keyWord);
-  const searchType = useSelector((state) => state.product.searchType);
-  const productList = useSelector((state) => state.product.productList);
+  const keyWord = useSelector((state) => state.product.keyWord, shallowEqual);
+  const isSearch = useSelector((state) => state.product.isSearch, shallowEqual);
+  const searchType = useSelector(
+    (state) => state.product.searchType,
+    shallowEqual
+  );
+  const productList = useSelector(
+    (state) => state.product.productList,
+    shallowEqual
+  );
   const { list, total, pageNum, pageSize } = productList;
   const dataSource = list;
 
@@ -121,7 +128,7 @@ const ProductPage: React.FC = () => {
                 updateSearchListAction({
                   searchType,
                   keyWord,
-                  pageNum,
+                  pageNum: 1,
                   pageSize,
                 })
               );
@@ -143,10 +150,26 @@ const ProductPage: React.FC = () => {
         pagination={{
           total: total,
           pageSize: PAGE_SIZE,
+          current: pageNum,
           onChange: (page, pageSize) => {
-            dispatch(
-              getProductAction({ pageNum: page, pageSize: pageSize as number })
-            );
+            if (isSearch) {
+              debugger;
+              dispatch(
+                updateSearchListAction({
+                  searchType,
+                  keyWord,
+                  pageNum: page,
+                  pageSize: pageSize as number,
+                })
+              );
+            } else {
+              dispatch(
+                getProductAction({
+                  pageNum: page,
+                  pageSize: pageSize as number,
+                })
+              );
+            }
           },
         }}
         bordered

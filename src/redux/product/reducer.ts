@@ -15,6 +15,7 @@ interface StoreState {
     pageSize: number;
     list: any;
   };
+  isSearch: boolean;
   keyWord: string;
   searchType: string;
 }
@@ -27,6 +28,7 @@ const defaultState: StoreState = {
     pageSize: 0,
     list: [],
   },
+  isSearch: false,
   keyWord: "", // 搜索关键字
   searchType: "productName", // 搜索类型 productName：是按名称搜索； productDesc：按描述搜索
 };
@@ -63,6 +65,7 @@ const productReducer = (state = defaultState, action: ModifyAction) => {
       return {
         ...state,
         keyWord: action.payload,
+        isSearch: true,
       };
     case UPDATESEARCHLIST:
       return {
