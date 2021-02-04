@@ -1,0 +1,11 @@
+.detail-button {
+  padding-right: 5px !important;
+  padding-left: 0px !important;
+}
+.product-list {
+  justify-content: flex-start !important;
+  .product-name {
+    font-size: 20px;
+    font-weight: bold;
+  }
+}

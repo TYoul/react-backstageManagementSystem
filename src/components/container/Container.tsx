@@ -14,6 +14,8 @@ import LeftMenu from "../left-menu/LeftMenu";
 import HomePage from "../../pages/home/Home";
 import CategoryPage from "../../pages/category/Category";
 import ProductPage from "../../pages/product/Product";
+import AddUpdatePage from "../../pages/product/addUpdate/AddUpdate";
+import DetailPage from "../../pages/product/detail/Detail";
 import UserPage from "../../pages/user/User";
 import RolePage from "../../pages/role/Role";
 import BarPage from "../../pages/bar/Bar";
@@ -21,7 +23,6 @@ import LinePage from "../../pages/line/Line";
 import PiePage from "../../pages/pie/Pie";
 
 const ContainerPage: React.FC = () => {
-  // const dispatch = useDispatch();
   const login = useSelector((state) => state.login, shallowEqual);
   const { isLogin } = login;
 
@@ -43,7 +44,17 @@ const ContainerPage: React.FC = () => {
           <Switch>
             <Route path="/home" component={HomePage} />
             <Route path="/prod/category" component={CategoryPage} />
-            <Route path="/prod/product" component={ProductPage} />
+            <Route path="/prod/product" component={ProductPage} exact />
+            <Route
+              path="/prod/product/addUpdate"
+              component={AddUpdatePage}
+              exact
+            />
+            <Route
+              path="/prod/product/addUpdate/:id"
+              component={AddUpdatePage}
+            />
+            <Route path="/prod/product/detail/:id" component={DetailPage} />
             <Route path="/role" component={RolePage} />
             <Route path="/user" component={UserPage} />
             <Route path="/charts/bar" component={BarPage} />

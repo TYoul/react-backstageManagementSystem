@@ -12,3 +12,6 @@ export const UPDATESEARCHVALUE = "UPDATESEARCHVALUE";
 
 // 搜索商品列表
 export const UPDATESEARCHLIST = "UPDATESEARCHLIST";
+
+// 取消商品管理页面的重新渲染
+export const CANCERESETLREND = "CANCERESETLREND"

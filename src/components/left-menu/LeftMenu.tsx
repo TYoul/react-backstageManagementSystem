@@ -40,7 +40,9 @@ const LeftMenu: React.FC = () => {
         // TODO:defaultSelectedKeys只能设置一次，不加可以设置多次，以最后一次为主，
         // 在这里设置为defaultSelectedKeys的话，在login.tsx那里history.push("/home")，防止登录进来没有默认选中
         selectedKeys={[
-          history.location.pathname.split("/").reverse()[0] || "home",
+          history.location.pathname.indexOf("product") !== -1
+            ? "product"
+            : history.location.pathname.split("/").reverse()[0] || "home",
         ]}
         // TODO:默认打开
         defaultOpenKeys={history.location.pathname.split("/").splice(1, 2)}

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { useDispatch, shallowEqual } from "react-redux";
 import { useSelector } from "../../redux/hooks";
 import { Card, Button, Select, Input, Table } from "antd";
@@ -17,8 +18,11 @@ import {
 const { Option } = Select;
 
 const ProductPage: React.FC = () => {
+  // router hook
+  const history = useHistory();
   // redux hooks
   const dispatch = useDispatch();
+  const isRest = useSelector((state) => state.product.isRest, shallowEqual);
   const keyWord = useSelector((state) => state.product.keyWord, shallowEqual);
   const isSearch = useSelector((state) => state.product.isSearch, shallowEqual);
   const searchType = useSelector(
@@ -82,13 +86,29 @@ const ProductPage: React.FC = () => {
     },
     {
       title: "操作",
-      dataIndex: "operation",
+      // dataIndex: "operation",
       key: "operation",
-      render: () => {
+      render: (item) => {
+        const { _id } = item;
         return (
           <div className="product-operation">
-            <Button type="link">详情</Button>
-            <Button type="link">修改</Button>
+            <Button
+              type="link"
+              onClick={(e) =>
+                history.push({
+                  pathname: `/prod/product/detail/${_id}`,
+                  state: item,
+                })
+              }
+            >
+              详情
+            </Button>
+            <Button
+              type="link"
+              onClick={(e) => history.push(`/prod/product/addUpdate/${_id}`)}
+            >
+              修改
+            </Button>
           </div>
         );
       },
@@ -98,8 +118,10 @@ const ProductPage: React.FC = () => {
   ];
 
   useEffect(() => {
-    dispatch(getProductAction({ pageNum: 1, pageSize: PAGE_SIZE }));
-  }, [dispatch]);
+    if(isRest){
+      dispatch(getProductAction({ pageNum: 1, pageSize: PAGE_SIZE }));
+    }
+  }, [dispatch,isRest]);
 
   return (
     <Card
@@ -153,7 +175,6 @@ const ProductPage: React.FC = () => {
           current: pageNum,
           onChange: (page, pageSize) => {
             if (isSearch) {
-              debugger;
               dispatch(
                 updateSearchListAction({
                   searchType,

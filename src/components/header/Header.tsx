@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch,shallowEqual } from "react-redux";
+import { useDispatch, shallowEqual } from "react-redux";
 import { useSelector } from "../../redux/hooks";
 import { useHistory } from "react-router-dom";
 import { signOutAction } from "../../redux/login/actions";
@@ -12,7 +12,10 @@ const Header: React.FC = () => {
   const [nowTime, setNowTime] = useState("");
   const [title, setTitle] = useState("");
   const history = useHistory();
-  const username = useSelector((state) => state.login.user.username,shallowEqual);
+  const username = useSelector(
+    (state) => state.login.user.username,
+    shallowEqual
+  );
 
   const dispatch = useDispatch();
 
@@ -36,7 +39,10 @@ const Header: React.FC = () => {
   // 由于定时器会导致组件的时间更新，所以这个组件会一直render，将getTitle函数放到useCallback中，防止其多次调用
   // TODO:另一种方法：利用redux，当点击侧边栏菜单时，将对应的数据放到redux中，在这边取出来。但是放在ComponentDidMount取出来，为了刷新的时候有数据，没刷新，从redux中拿，刷新从自身拿
   const getTitle = useCallback(() => {
-    const pathKey = history.location.pathname.split("/").reverse()[0];
+    const pathKey =
+      history.location.pathname.indexOf("product") !== -1
+        ? "product"
+        : history.location.pathname.split("/").reverse()[0];
     let title = "";
     menuList.forEach((item: any) => {
       if (item.children) {

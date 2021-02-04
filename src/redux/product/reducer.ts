@@ -4,6 +4,7 @@ import {
   UPDATESEARCHTYPE,
   UPDATESEARCHVALUE,
   UPDATESEARCHLIST,
+  CANCERESETLREND,
 } from "./constants";
 import { ModifyAction } from "./actions";
 
@@ -15,6 +16,7 @@ interface StoreState {
     pageSize: number;
     list: any;
   };
+  isRest: boolean;
   isSearch: boolean;
   keyWord: string;
   searchType: string;
@@ -28,6 +30,7 @@ const defaultState: StoreState = {
     pageSize: 0,
     list: [],
   },
+  isRest: true, // 商品管理页面是否重新渲染（解决数据回显问题）
   isSearch: false,
   keyWord: "", // 搜索关键字
   searchType: "productName", // 搜索类型 productName：是按名称搜索； productDesc：按描述搜索
@@ -77,6 +80,11 @@ const productReducer = (state = defaultState, action: ModifyAction) => {
           pageSize: action.payload.pageSize,
           list: action.payload.list,
         },
+      };
+    case CANCERESETLREND:
+      return {
+        ...state,
+        isRest: false,
       };
     default:
       return state;

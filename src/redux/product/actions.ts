@@ -4,6 +4,7 @@ import {
   UPDATESEARCHTYPE,
   UPDATESEARCHVALUE,
   UPDATESEARCHLIST,
+  CANCERESETLREND
 } from "./constants";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../store";
@@ -24,27 +25,32 @@ interface updateStatusAction {
   payload: any;
 }
 
-interface updateSearchType {
+interface updateSearchTypeAction {
   type: typeof UPDATESEARCHTYPE;
   payload: string;
 }
 
-interface updateSearchValue {
+interface updateSearchValueAction {
   type: typeof UPDATESEARCHVALUE;
   payload: string;
 }
 
-interface updateSearchList {
+interface updateSearchListAction {
   type: typeof UPDATESEARCHLIST;
   payload: any;
+}
+
+interface cancelResetRendAction{
+  type:typeof CANCERESETLREND,
+  payload:boolean
 }
 
 export type ModifyAction =
   | productSuccessAction
   | updateStatusAction
-  | updateSearchType
-  | updateSearchValue
-  | updateSearchList;
+  | updateSearchTypeAction
+  | updateSearchValueAction
+  | updateSearchListAction|cancelResetRendAction
 
 const productSuccessAction = (data: any): productSuccessAction => ({
   type: PRODUCT_SUCCESS,
@@ -56,20 +62,25 @@ const updateSuccessAction = (data: any): updateStatusAction => ({
   payload: data,
 });
 
-const updateSearchListSuccessAction = (data:any):updateSearchList => ({
+const updateSearchListSuccessAction = (data:any):updateSearchListAction => ({
   type: UPDATESEARCHLIST,
   payload: data,
 })
 
-export const updateSearchTypeAction = (data: string): updateSearchType => ({
+export const updateSearchTypeAction = (data: string): updateSearchTypeAction => ({
   type: UPDATESEARCHTYPE,
   payload: data,
 });
 
-export const updateSearchValueAction = (data: string): updateSearchValue => ({
+export const updateSearchValueAction = (data: string): updateSearchValueAction => ({
   type: UPDATESEARCHVALUE,
   payload: data,
 });
+
+export const cancelResetRendAction = (data:boolean):cancelResetRendAction => ({
+  type: CANCERESETLREND,
+  payload: data
+})
 
 // 获取商品分页列表数据的action
 export const getProductAction = ({
