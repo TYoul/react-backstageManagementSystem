@@ -15,3 +15,6 @@ export const UPDATESEARCHLIST = "UPDATESEARCHLIST";
 
 // 取消商品管理页面的重新渲染
 export const CANCERESETLREND = "CANCERESETLREND"
+
+// 获取商品分类
+export const GETCATEGORYLIST = "GETCATEGORYLIST"

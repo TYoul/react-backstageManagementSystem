@@ -22,6 +22,10 @@ const ProductPage: React.FC = () => {
   const history = useHistory();
   // redux hooks
   const dispatch = useDispatch();
+  const isLoading = useSelector(
+    (state) => state.product.isLoading,
+    shallowEqual
+  );
   const isRest = useSelector((state) => state.product.isRest, shallowEqual);
   const keyWord = useSelector((state) => state.product.keyWord, shallowEqual);
   const isSearch = useSelector((state) => state.product.isSearch, shallowEqual);
@@ -118,7 +122,7 @@ const ProductPage: React.FC = () => {
   ];
 
   useEffect(() => {
-    if (isRest || list.length===0) {
+    if (isRest || list.length === 0) {
       dispatch(getProductAction({ pageNum: 1, pageSize: PAGE_SIZE }));
     }
   }, [dispatch, isRest]);
@@ -161,7 +165,10 @@ const ProductPage: React.FC = () => {
         </div>
       }
       extra={
-        <Button type="primary">
+        <Button
+          type="primary"
+          onClick={(e) => history.push("/prod/product/addUpdate")}
+        >
           <PlusOutlined />
           添加商品
         </Button>
@@ -169,6 +176,7 @@ const ProductPage: React.FC = () => {
     >
       <Table
         rowKey="_id"
+        loading={isLoading}
         pagination={{
           total: total,
           pageSize: PAGE_SIZE,

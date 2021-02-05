@@ -4,7 +4,8 @@ import {
   UPDATESEARCHTYPE,
   UPDATESEARCHVALUE,
   UPDATESEARCHLIST,
-  CANCERESETLREND
+  CANCERESETLREND,
+  GETCATEGORYLIST,
 } from "./constants";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../store";
@@ -12,6 +13,7 @@ import {
   getProductList,
   updateStatus,
   getSearchProductList,
+  getCategoryList,
 } from "../../services/product";
 import { message } from "antd";
 
@@ -40,9 +42,14 @@ interface updateSearchListAction {
   payload: any;
 }
 
-interface cancelResetRendAction{
-  type:typeof CANCERESETLREND,
-  payload:boolean
+interface cancelResetRendAction {
+  type: typeof CANCERESETLREND;
+  payload: boolean;
+}
+
+interface getCategoryListAction {
+  type: typeof GETCATEGORYLIST;
+  payload: any;
 }
 
 export type ModifyAction =
@@ -50,7 +57,9 @@ export type ModifyAction =
   | updateStatusAction
   | updateSearchTypeAction
   | updateSearchValueAction
-  | updateSearchListAction|cancelResetRendAction
+  | updateSearchListAction
+  | cancelResetRendAction
+  | getCategoryListAction;
 
 const productSuccessAction = (data: any): productSuccessAction => ({
   type: PRODUCT_SUCCESS,
@@ -62,25 +71,36 @@ const updateSuccessAction = (data: any): updateStatusAction => ({
   payload: data,
 });
 
-const updateSearchListSuccessAction = (data:any):updateSearchListAction => ({
+const updateSearchListSuccessAction = (data: any): updateSearchListAction => ({
   type: UPDATESEARCHLIST,
   payload: data,
-})
+});
 
-export const updateSearchTypeAction = (data: string): updateSearchTypeAction => ({
+const getCategoryListSuccessAction = (data: any): getCategoryListAction => ({
+  type: GETCATEGORYLIST,
+  payload: data,
+});
+
+export const updateSearchTypeAction = (
+  data: string
+): updateSearchTypeAction => ({
   type: UPDATESEARCHTYPE,
   payload: data,
 });
 
-export const updateSearchValueAction = (data: string): updateSearchValueAction => ({
+export const updateSearchValueAction = (
+  data: string
+): updateSearchValueAction => ({
   type: UPDATESEARCHVALUE,
   payload: data,
 });
 
-export const cancelResetRendAction = (data:boolean):cancelResetRendAction => ({
+export const cancelResetRendAction = (
+  data: boolean
+): cancelResetRendAction => ({
   type: CANCERESETLREND,
-  payload: data
-})
+  payload: data,
+});
 
 // 获取商品分页列表数据的action
 export const getProductAction = ({
@@ -133,10 +153,26 @@ export const updateSearchListAction = ({
     pageNum,
     pageSize,
   });
-  const {data,status,msg} = result;
-  if(status===0){
-    dispatch(updateSearchListSuccessAction(data))
-  }else if(status ===1){
-    message.error(msg,1)
+  const { data, status, msg } = result;
+  if (status === 0) {
+    dispatch(updateSearchListSuccessAction(data));
+  } else if (status === 1) {
+    message.error(msg, 1);
+  }
+};
+
+// 获取商品分类的action
+export const getCategoryListAction = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  ModifyAction
+> => async (dispatch) => {
+  const result: any = await getCategoryList();
+  const { status, data, msg } = result;
+  if (status === 0) {
+    dispatch(getCategoryListSuccessAction(data));
+  } else if (status) {
+    message.error(msg, 1);
   }
 };

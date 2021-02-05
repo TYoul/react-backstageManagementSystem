@@ -5,6 +5,7 @@ import {
   UPDATESEARCHVALUE,
   UPDATESEARCHLIST,
   CANCERESETLREND,
+  GETCATEGORYLIST,
 } from "./constants";
 import { ModifyAction } from "./actions";
 
@@ -16,10 +17,12 @@ interface StoreState {
     pageSize: number;
     list: any;
   };
+  isLoading: boolean;
   isRest: boolean;
   isSearch: boolean;
   keyWord: string;
   searchType: string;
+  categoryList: { _id: string; name: string; __v: number }[];
 }
 
 const defaultState: StoreState = {
@@ -30,10 +33,12 @@ const defaultState: StoreState = {
     pageSize: 0,
     list: [],
   },
+  isLoading: true,
   isRest: true, // 商品管理页面是否重新渲染（解决数据回显问题）
   isSearch: false,
   keyWord: "", // 搜索关键字
   searchType: "productName", // 搜索类型 productName：是按名称搜索； productDesc：按描述搜索
+  categoryList: [],
 };
 
 const productReducer = (state = defaultState, action: ModifyAction) => {
@@ -42,6 +47,7 @@ const productReducer = (state = defaultState, action: ModifyAction) => {
       return {
         ...state,
         productList: action.payload,
+        isLoading: false,
       };
     case UPDATESTATUS_SUCCESS:
       return {
@@ -85,6 +91,11 @@ const productReducer = (state = defaultState, action: ModifyAction) => {
       return {
         ...state,
         isRest: false,
+      };
+    case GETCATEGORYLIST:
+      return {
+        ...state,
+        categoryList: action.payload,
       };
     default:
       return state;

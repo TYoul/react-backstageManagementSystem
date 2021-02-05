@@ -27,6 +27,7 @@ const DetailPage: React.FC = () => {
   const history = useHistory();
   const localtion: localtion = useLocation();
   const { name, desc, price, imgs, detail } = localtion.state;
+  console.log(localtion);
 
   const createDetail = () => {
     return { __html: detail };
