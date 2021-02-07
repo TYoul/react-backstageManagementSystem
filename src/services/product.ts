@@ -62,7 +62,37 @@ export const getSearchProductList = ({
 // 获取分类列表
 export const getCategoryList = () => {
   return request({
-    url:"/manage/category/list",
-    method:'GET',
-  })
-}
+    url: "/manage/category/list",
+    method: "GET",
+  });
+};
+
+// 添加商品
+export const addProduct = ({
+  categoryId,
+  name,
+  desc,
+  price,
+  detail,
+  imgs,
+}: {
+  categoryId: string;
+  name: string;
+  desc: string;
+  price: string;
+  detail: string;
+  imgs: string[];
+}) => {
+  return request({
+    url: "/manage/product/add",
+    method: "POST",
+    data: {
+      categoryId,
+      name,
+      desc,
+      price,
+      detail,
+      imgs,
+    },
+  });
+};

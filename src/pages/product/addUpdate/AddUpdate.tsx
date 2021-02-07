@@ -5,6 +5,8 @@ import { useParams, useHistory } from "react-router-dom";
 import { Card, Button, Form, Input, Select } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
+import PicturesWall from "../../../components/picture-wall/PictureWall";
+
 import {
   cancelResetRendAction,
   getCategoryListAction,
@@ -33,7 +35,11 @@ const AddUpdatePage: React.FC = () => {
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    if (errorInfo) return;
+  };
+
+  const onFinish = (values: any) => {
+    console.log("Success:", values);
   };
 
   function handleChange(value: any) {
@@ -63,10 +69,11 @@ const AddUpdatePage: React.FC = () => {
         className="basic"
         initialValues={{ remember: true }}
         onFinishFailed={onFinishFailed}
+        onFinish={onFinish}
       >
         <Form.Item
           label="商品名称："
-          className="username"
+          name="name"
           rules={[{ required: true, message: "请输入商品名称" }]}
         >
           <Input placeholder="商品名称" />
@@ -74,29 +81,26 @@ const AddUpdatePage: React.FC = () => {
 
         <Form.Item
           label="商品描述："
-          className="productDesc"
+          name="desc"
           rules={[{ required: true, message: "请输入商品描述" }]}
         >
           <Input placeholder="商品描述" />
         </Form.Item>
         <Form.Item
           label="商品价格："
-          className="productPrice"
+          name="price"
           rules={[{ required: true, message: "请输入商品价格" }]}
         >
           <Input placeholder="商品价格" prefix="￥" suffix="元" type="number" />
         </Form.Item>
         <Form.Item
           label="商品分类："
-          className="productSort"
+          name="categoryId"
           rules={[{ required: true, message: "请输入商品分类" }]}
+          initialValue=""
         >
-          <Select
-            defaultValue="selectSort"
-            style={{ width: 120 }}
-            onChange={handleChange}
-          >
-            <Option value="selectSort">选择分类</Option>
+          <Select style={{ width: 120 }} onChange={handleChange}>
+            <Option value="">请选择分类</Option>
             {categoryList.map((item: any) => (
               <Option value={item._id} key={item._id}>
                 {item.name}
@@ -106,18 +110,18 @@ const AddUpdatePage: React.FC = () => {
         </Form.Item>
         <Form.Item
           label="商品图片："
-          className="productPic"
+          name="imgs"
           rules={[{ required: true, message: "请输入商品图片" }]}
         >
-          此处为照片墙
+          <PicturesWall />
         </Form.Item>
-        <Form.Item
+        {/* <Form.Item
           label="商品详情："
-          className="productDetail"
+          name="detail"
           rules={[{ required: true, message: "请输入商品详情" }]}
         >
           此处为富文本编辑器
-        </Form.Item>
+        </Form.Item> */}
         <Button type="primary" htmlType="submit">
           提交
         </Button>

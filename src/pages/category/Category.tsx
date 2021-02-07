@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, shallowEqual } from "react-redux";
 import { useSelector } from "../../redux/hooks";
 import { Button, Card, Table, Modal, Form, Input, message } from "antd";
@@ -112,10 +112,10 @@ const CategoryPage: React.FC = () => {
   };
 
   // 弹窗取消
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     form.resetFields();
     dispatch(changeModalAction(false));
-  };
+  }, []);
 
   return (
     <>
