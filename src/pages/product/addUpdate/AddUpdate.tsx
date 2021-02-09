@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "../../../redux/hooks";
 import { useParams, useHistory } from "react-router-dom";
@@ -19,6 +19,7 @@ interface RouteParams {
 
 const AddUpdatePage: React.FC = () => {
   const dispatch = useDispatch();
+  const pictureWall = useRef<any>();
   const categoryList = useSelector((state) => state.product.categoryList);
 
   const history = useHistory();
@@ -39,7 +40,9 @@ const AddUpdatePage: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    // 从pictureWall组件中获取到已经上传的图片数组
+    const imgs = pictureWall.current.getImg();
+    console.log("Success:", { ...values, imgs });
   };
 
   function handleChange(value: any) {
@@ -76,7 +79,7 @@ const AddUpdatePage: React.FC = () => {
           name="name"
           rules={[{ required: true, message: "请输入商品名称" }]}
         >
-          <Input placeholder="商品名称" />
+          <Input placeholder="商品名称" style={{ width: "20%" }} />
         </Form.Item>
 
         <Form.Item
@@ -84,14 +87,20 @@ const AddUpdatePage: React.FC = () => {
           name="desc"
           rules={[{ required: true, message: "请输入商品描述" }]}
         >
-          <Input placeholder="商品描述" />
+          <Input placeholder="商品描述" style={{ width: "20%" }} />
         </Form.Item>
         <Form.Item
           label="商品价格："
           name="price"
           rules={[{ required: true, message: "请输入商品价格" }]}
         >
-          <Input placeholder="商品价格" prefix="￥" suffix="元" type="number" />
+          <Input
+            placeholder="商品价格"
+            prefix="￥"
+            suffix="元"
+            type="number"
+            style={{ width: "20%" }}
+          />
         </Form.Item>
         <Form.Item
           label="商品分类："
@@ -111,9 +120,8 @@ const AddUpdatePage: React.FC = () => {
         <Form.Item
           label="商品图片："
           name="imgs"
-          rules={[{ required: true, message: "请输入商品图片" }]}
         >
-          <PicturesWall />
+          <PicturesWall ref={pictureWall} />
         </Form.Item>
         {/* <Form.Item
           label="商品详情："
@@ -122,7 +130,7 @@ const AddUpdatePage: React.FC = () => {
         >
           此处为富文本编辑器
         </Form.Item> */}
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" style={{ marginLeft: "50px" }}>
           提交
         </Button>
       </Form>

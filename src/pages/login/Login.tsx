@@ -26,7 +26,7 @@ const LoginPage: React.FC = () => {
       // TODO:登录时，跳转到home页面，侧边栏默认选中首页
       history.push("/");
     } else if (!isLogin && msg) {
-      message.error(msg);
+      message.error(msg,1);
     }
   }, [isLogin, history, msg]);
 

@@ -1,6 +1,11 @@
+/**
+ * 该组件是拿的antd 4.12.2的Upload的照片墙，并修改了一些部分
+ */
 import React from "react";
-import { Upload, Modal } from "antd";
+import { Upload, Modal, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { BASE_URL } from "../../services/config";
+import { deleteImg } from "../../services/addUpdate";
 
 function getBase64(file: any) {
   return new Promise((resolve, reject) => {
@@ -13,57 +18,26 @@ function getBase64(file: any) {
 
 class PicturesWall extends React.Component {
   state = {
-    previewVisible: false,
-    previewImage: "",
+    previewVisible: false, // 是否展示预览窗
+    previewImage: "", // 要预览的图片url地址或base64编码
     previewTitle: "",
-    fileList: [
-      {
-        uid: "-1",
-        name: "image.png",
-        status: "done",
-        url:
-          "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-      },
-      {
-        uid: "-2",
-        name: "image.png",
-        status: "done",
-        url:
-          "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-      },
-      {
-        uid: "-3",
-        name: "image.png",
-        status: "done",
-        url:
-          "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-      },
-      {
-        uid: "-4",
-        name: "image.png",
-        status: "done",
-        url:
-          "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-      },
-      {
-        uid: "-xxx",
-        percent: 50,
-        name: "image.png",
-        status: "uploading",
-        url:
-          "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-      },
-      {
-        uid: "-5",
-        name: "image.png",
-        status: "error",
-      },
-    ],
+    fileList: [], // 收集好的所有上传完毕的图片名
   };
 
+  getImg() {
+    let result: string[] = [];
+    (this.state.fileList as any).forEach((item: any) => {
+      result.push(item.name);
+    });
+    return result;
+  }
+
+  // 关闭预览窗
   handleCancel = () => this.setState({ previewVisible: false });
 
+  // 展示预览窗
   handlePreview = async (file: any) => {
+    // 如果图片没有url也没有转换过base64，那么调用如下方法把图片转成base64
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
@@ -76,7 +50,25 @@ class PicturesWall extends React.Component {
     });
   };
 
-  handleChange = ({ fileList }: any) => this.setState({ fileList });
+  // 图片状态发生改变的回调
+  handleChange = async ({ fileList, file }: { fileList: any; file: any }) => {
+    console.log(file);
+    console.log(fileList);
+    // 若文件上传成功
+    if (file.status === "done") {
+      fileList[fileList.length - 1].url = file.response.data.url;
+      fileList[fileList.length - 1].name = file.response.data.name;
+    }
+    // 若文件删除
+    if (file.status === "removed") {
+      const result = await deleteImg(file.name);
+      const { status } = result;
+      if (status === 0) {
+        message.success("图片删除成功", 1);
+      } else message.error("图片删除失败", 1);
+    }
+    this.setState({ fileList });
+  };
 
   render() {
     const { previewVisible, previewImage, fileList, previewTitle } = this.state;
@@ -89,13 +81,16 @@ class PicturesWall extends React.Component {
     return (
       <>
         <Upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          listType="picture-card"
-          fileList={fileList as any}
-          onPreview={this.handlePreview}
-          onChange={this.handleChange}
+          action={`${BASE_URL}/manage/img/upload`} // 接受图片服务器的地址
+          method="POST" // 请求方式
+          name="image" // 参数名称
+          listType="picture-card" // 照片墙的展示方式
+          fileList={fileList as any} // 图片列表，{}[]
+          onPreview={this.handlePreview} // 点击预览按钮回调
+          onChange={this.handleChange} // 图片状态改变的回调<图片上传中、图片删除、图片成功上传>
         >
-          {fileList.length >= 8 ? null : uploadButton}
+          {/* 隐藏上传按钮 */}
+          {fileList.length >= 4 ? null : uploadButton}
         </Upload>
         <Modal
           visible={previewVisible}
