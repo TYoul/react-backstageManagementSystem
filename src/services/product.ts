@@ -96,3 +96,36 @@ export const addProduct = ({
     },
   });
 };
+
+// 更新商品
+export const updateProduct = ({
+  _id,
+  categoryId,
+  name,
+  desc,
+  price,
+  detail,
+  imgs,
+}: {
+  _id:string;
+  categoryId: string;
+  name: string;
+  desc: string;
+  price: string;
+  detail: string;
+  imgs: string[];
+}) => {
+  return request({
+    url: "/manage/product/update",
+    method: "POST",
+    data: {
+      _id,
+      categoryId,
+      name,
+      desc,
+      price,
+      detail,
+      imgs,
+    },
+  });
+};

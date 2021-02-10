@@ -109,7 +109,10 @@ const ProductPage: React.FC = () => {
             </Button>
             <Button
               type="link"
-              onClick={(e) => history.push(`/prod/product/addUpdate/${_id}`)}
+              onClick={(e) => history.push({
+                pathname:`/prod/product/addUpdate/${_id}`,
+                state:item
+              })}
             >
               修改
             </Button>
