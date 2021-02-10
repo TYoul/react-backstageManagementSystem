@@ -2,10 +2,12 @@ import React, { useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "../../../redux/hooks";
 import { useParams, useHistory } from "react-router-dom";
-import { Card, Button, Form, Input, Select } from "antd";
+import { Card, Button, Form, Input, Select, message } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
+import { addProduct } from "../../../services/product";
 
 import PicturesWall from "../../../components/picture-wall/PictureWall";
+import RichTextEditor from "../../../components/rich-text-editor/RichTextEditor";
 
 import {
   cancelResetRendAction,
@@ -20,6 +22,7 @@ interface RouteParams {
 const AddUpdatePage: React.FC = () => {
   const dispatch = useDispatch();
   const pictureWall = useRef<any>();
+  const richTextEditor = useRef<any>();
   const categoryList = useSelector((state) => state.product.categoryList);
 
   const history = useHistory();
@@ -28,7 +31,7 @@ const AddUpdatePage: React.FC = () => {
 
   useEffect(() => {
     dispatch(getCategoryListAction());
-  }, []);
+  }, [dispatch]);
 
   const layout = {
     labelCol: { span: 2 },
@@ -39,10 +42,16 @@ const AddUpdatePage: React.FC = () => {
     if (errorInfo) return;
   };
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     // 从pictureWall组件中获取到已经上传的图片数组
     const imgs = pictureWall.current.getImg();
-    console.log("Success:", { ...values, imgs });
+    const detail = richTextEditor.current.getRichText();
+    const result: any = await addProduct({ ...values, imgs, detail });
+    const { status, msg } = result;
+    if (status === 0) {
+      message.success("添加商品成功");
+      history.replace("/prod/product");
+    } else message.error(msg, 1);
   };
 
   function handleChange(value: any) {
@@ -117,19 +126,12 @@ const AddUpdatePage: React.FC = () => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item
-          label="商品图片："
-          name="imgs"
-        >
+        <Form.Item label="商品图片：" name="imgs">
           <PicturesWall ref={pictureWall} />
         </Form.Item>
-        {/* <Form.Item
-          label="商品详情："
-          name="detail"
-          rules={[{ required: true, message: "请输入商品详情" }]}
-        >
-          此处为富文本编辑器
-        </Form.Item> */}
+        <Form.Item label="商品详情：" name="detail" wrapperCol={{ md: 8 }}>
+          <RichTextEditor ref={richTextEditor} />
+        </Form.Item>
         <Button type="primary" htmlType="submit" style={{ marginLeft: "50px" }}>
           提交
         </Button>
