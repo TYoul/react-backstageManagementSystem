@@ -5,7 +5,6 @@ import { useParams, useHistory, useLocation } from "react-router-dom";
 import { Card, Button, Form, Input, Select, message } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { addProduct, updateProduct } from "../../../services/product";
-
 import PicturesWall from "../../../components/picture-wall/PictureWall";
 import RichTextEditor from "../../../components/rich-text-editor/RichTextEditor";
 
@@ -61,7 +60,8 @@ const AddUpdatePage: React.FC = () => {
     if (errorInfo) return;
   };
 
-  // form表单提交
+
+// form表单提交
   const onFinish = async (values: any) => {
     // 从pictureWall组件中获取到已经上传的图片数组
     const imgs = pictureWall.current.getImg();
