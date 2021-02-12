@@ -93,7 +93,7 @@ const productReducer = (state = defaultState, action: ModifyAction) => {
     case CANCERESETLREND:
       return {
         ...state,
-        isRest: false,
+        isRest: action.payload,
       };
     case GETCATEGORYLIST:
       return {

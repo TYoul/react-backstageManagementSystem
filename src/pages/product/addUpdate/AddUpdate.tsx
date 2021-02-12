@@ -60,8 +60,7 @@ const AddUpdatePage: React.FC = () => {
     if (errorInfo) return;
   };
 
-
-// form表单提交
+  // form表单提交
   const onFinish = async (values: any) => {
     // 从pictureWall组件中获取到已经上传的图片数组
     const imgs = pictureWall.current.getImg();
@@ -80,6 +79,7 @@ const AddUpdatePage: React.FC = () => {
     if (status === 0) {
       message.success("添加商品成功");
       dispatch(updateProductAction(true));
+      dispatch(cancelResetRendAction(true));
       history.replace("/prod/product");
     } else message.error(msg, 1);
   };
