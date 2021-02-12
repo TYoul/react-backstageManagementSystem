@@ -24,6 +24,23 @@ class PicturesWall extends React.Component {
     fileList: [], // 收集好的所有上传完毕的图片名
   };
 
+  // 设置fileList
+  setImg(imgArr: string[]) {
+    const result = imgArr.map((item, index) => {
+      return {
+        uid: index,
+        name: item,
+        status: "done",
+        url: `${BASE_URL}/upload/${item}`,
+      };
+    });
+    this.setState({
+      fileList: result,
+    });
+    // return result;
+  }
+
+  // 对外暴露图片的方法：将图片数组fileList暴露出去
   getImg() {
     let result: string[] = [];
     (this.state.fileList as any).forEach((item: any) => {

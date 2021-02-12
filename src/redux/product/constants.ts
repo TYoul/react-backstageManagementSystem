@@ -18,3 +18,6 @@ export const CANCERESETLREND = "CANCERESETLREND"
 
 // 获取商品分类
 export const GETCATEGORYLIST = "GETCATEGORYLIST"
+
+// 更新商品
+export const UPDATEPRODUCT = "UPDATEPRODUCT"

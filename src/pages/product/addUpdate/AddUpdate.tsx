@@ -4,7 +4,7 @@ import { useSelector } from "../../../redux/hooks";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 import { Card, Button, Form, Input, Select, message } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { addProduct } from "../../../services/product";
+import { addProduct, updateProduct } from "../../../services/product";
 
 import PicturesWall from "../../../components/picture-wall/PictureWall";
 import RichTextEditor from "../../../components/rich-text-editor/RichTextEditor";
@@ -12,6 +12,7 @@ import RichTextEditor from "../../../components/rich-text-editor/RichTextEditor"
 import {
   cancelResetRendAction,
   getCategoryListAction,
+  updateProductAction,
 } from "../../../redux/product/actions";
 
 const { Option } = Select;
@@ -45,6 +46,9 @@ const AddUpdatePage: React.FC = () => {
     dispatch(getCategoryListAction());
     if (match.id) {
       form.setFieldsValue(localtion.state);
+      pictureWall.current.setImg(localtion.state.imgs);
+      richTextEditor.current.setRichText(localtion.state.detail);
+      console.log(localtion.state);
     }
   }, [dispatch]);
 
@@ -57,14 +61,25 @@ const AddUpdatePage: React.FC = () => {
     if (errorInfo) return;
   };
 
+  // form表单提交
   const onFinish = async (values: any) => {
     // 从pictureWall组件中获取到已经上传的图片数组
     const imgs = pictureWall.current.getImg();
     const detail = richTextEditor.current.getRichText();
-    const result: any = await addProduct({ ...values, imgs, detail });
+    let result: any;
+    // 判断是否有id，有id的化是修改商品，没有的化是添加商品
+    match.id
+      ? (result = await updateProduct({
+          ...values,
+          _id: match.id,
+          imgs,
+          detail,
+        }))
+      : await addProduct({ ...values, imgs, detail });
     const { status, msg } = result;
     if (status === 0) {
       message.success("添加商品成功");
+      dispatch(updateProductAction(true));
       history.replace("/prod/product");
     } else message.error(msg, 1);
   };
@@ -81,17 +96,19 @@ const AddUpdatePage: React.FC = () => {
             type="link"
             className="detail-button"
             onClick={(e) => {
+              dispatch(updateProductAction(false));
               dispatch(cancelResetRendAction(false));
               history.goBack();
             }}
           >
             <ArrowLeftOutlined />
           </Button>
-          商品详情
+          商品{match.id ? "修改" : "详情"}
         </>
       }
     >
       <Form
+        form={form}
         {...layout}
         className="basic"
         initialValues={{ remember: true }}

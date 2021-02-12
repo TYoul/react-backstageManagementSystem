@@ -2,10 +2,10 @@
  * github上面的react-draft-wysiwyg富文本编辑器
  */
 import React, { Component } from "react";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
-// import htmlToDraft from "html-to-draftjs";
+import htmlToDraft from "html-to-draftjs";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "./RichTextEditor.scss";
 
@@ -14,7 +14,7 @@ class RichTextEditor extends Component {
     editorState: EditorState.createEmpty(),
   };
 
-  onEditorStateChange = (editorState: any) => {
+  onEditorStateChange = (editorState: EditorState) => {
     this.setState({
       editorState,
     });
@@ -25,6 +25,18 @@ class RichTextEditor extends Component {
     const { editorState } = this.state;
     return draftToHtml(convertToRaw(editorState.getCurrentContent()));
   };
+
+  setRichText(html: any) {
+    // const html = '<p>Hey this <strong>editor</strong> rocks 😀</p>';
+    const contentBlock = htmlToDraft(html);
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(
+        contentBlock.contentBlocks
+      );
+      const editorState = EditorState.createWithContent(contentState);
+      this.setState({ editorState });
+    }
+  }
 
   render() {
     const { editorState } = this.state;

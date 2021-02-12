@@ -1,5 +1,15 @@
 # react + ts 的后台管理系统
 
+## 运行项目
+- 项目运行流程：
+  + 首先clone项目：git clone https://github.com/TYoul/react-backstageManagementSystem.git
+
+  + 切换到目标文件：cd react-backstageManagementSystem
+
+  + 安装项目所需依赖：yarn 
+
+  + 启动项目：yarn start
+
 ## 注意点
 
 node 版本需要使用 14.几，因为要与 sass 版本相对应

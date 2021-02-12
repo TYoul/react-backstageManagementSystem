@@ -29,6 +29,10 @@ const ProductPage: React.FC = () => {
   const isRest = useSelector((state) => state.product.isRest, shallowEqual);
   const keyWord = useSelector((state) => state.product.keyWord, shallowEqual);
   const isSearch = useSelector((state) => state.product.isSearch, shallowEqual);
+  const isUpdateProduct = useSelector(
+    (state) => state.product.isUpdateProduct,
+    shallowEqual
+  );
   const searchType = useSelector(
     (state) => state.product.searchType,
     shallowEqual
@@ -109,10 +113,12 @@ const ProductPage: React.FC = () => {
             </Button>
             <Button
               type="link"
-              onClick={(e) => history.push({
-                pathname:`/prod/product/addUpdate/${_id}`,
-                state:item
-              })}
+              onClick={(e) =>
+                history.push({
+                  pathname: `/prod/product/addUpdate/${_id}`,
+                  state: item,
+                })
+              }
             >
               修改
             </Button>
@@ -125,10 +131,15 @@ const ProductPage: React.FC = () => {
   ];
 
   useEffect(() => {
-    if (isRest || list.length === 0) {
-      dispatch(getProductAction({ pageNum: 1, pageSize: PAGE_SIZE }));
+    if(isRest){
+      if (list.length === 0) {
+        dispatch(getProductAction({ pageNum: 1, pageSize: PAGE_SIZE }));
+      } else if (isUpdateProduct) {
+        dispatch(getProductAction({ pageNum: pageNum, pageSize: PAGE_SIZE }));
+      }
     }
-  }, [dispatch, isRest]);
+    
+  }, [dispatch, isRest, list.length, isUpdateProduct, pageNum]);
 
   return (
     <Card

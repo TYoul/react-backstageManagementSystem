@@ -6,6 +6,7 @@ import {
   UPDATESEARCHLIST,
   CANCERESETLREND,
   GETCATEGORYLIST,
+  UPDATEPRODUCT
 } from "./constants";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../store";
@@ -52,6 +53,11 @@ interface getCategoryListAction {
   payload: any;
 }
 
+interface updateProductAction{
+  type: typeof UPDATEPRODUCT;
+  payload:any
+}
+
 export type ModifyAction =
   | productSuccessAction
   | updateStatusAction
@@ -59,7 +65,7 @@ export type ModifyAction =
   | updateSearchValueAction
   | updateSearchListAction
   | cancelResetRendAction
-  | getCategoryListAction;
+  | getCategoryListAction|updateProductAction
 
 const productSuccessAction = (data: any): productSuccessAction => ({
   type: PRODUCT_SUCCESS,
@@ -99,6 +105,13 @@ export const cancelResetRendAction = (
   data: boolean
 ): cancelResetRendAction => ({
   type: CANCERESETLREND,
+  payload: data,
+});
+
+export const updateProductAction = (
+  data: boolean
+): updateProductAction => ({
+  type: UPDATEPRODUCT,
   payload: data,
 });
 

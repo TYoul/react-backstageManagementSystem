@@ -6,6 +6,7 @@ import {
   UPDATESEARCHLIST,
   CANCERESETLREND,
   GETCATEGORYLIST,
+  UPDATEPRODUCT,
 } from "./constants";
 import { ModifyAction } from "./actions";
 
@@ -23,6 +24,7 @@ interface StoreState {
   keyWord: string;
   searchType: string;
   categoryList: { _id: string; name: string; __v: number }[];
+  isUpdateProduct: boolean;
 }
 
 const defaultState: StoreState = {
@@ -34,11 +36,12 @@ const defaultState: StoreState = {
     list: [],
   },
   isLoading: true,
-  isRest: true, // 商品管理页面是否重新渲染（解决数据回显问题）
+  isRest: true, // 商品管理页面是否重新渲染（解决数据回显问题），点击返回按钮isRest=false
   isSearch: false,
   keyWord: "", // 搜索关键字
   searchType: "productName", // 搜索类型 productName：是按名称搜索； productDesc：按描述搜索
   categoryList: [],
+  isUpdateProduct: false, // 是否修改商品
 };
 
 const productReducer = (state = defaultState, action: ModifyAction) => {
@@ -96,6 +99,11 @@ const productReducer = (state = defaultState, action: ModifyAction) => {
       return {
         ...state,
         categoryList: action.payload,
+      };
+    case UPDATEPRODUCT:
+      return {
+        ...state,
+        isUpdateProduct: true,
       };
     default:
       return state;
