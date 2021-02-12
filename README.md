@@ -1,7 +1,5 @@
 # react + ts 的后台管理系统
 
-<<<<<<< HEAD
-## 运行项目
 - 项目运行流程：
   + 首先clone项目：git clone https://github.com/TYoul/react-backstageManagementSystem.git
 
@@ -11,13 +9,7 @@
 
   + 启动项目：yarn start
 
-=======
->>>>>>> e5b8827df739b08c4f8df6a021478847a99d18d9
-## 注意点
-
 node 版本需要使用 14.几，因为要与 sass 版本相对应
-
-用到的技术有：
 
 > react 函数式组件 加 typescript 加 hooks
 > UI 组件库：antd
