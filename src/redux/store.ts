@@ -5,11 +5,13 @@ import thunk from "redux-thunk";
 import loginReducer from "./login/reducer";
 import categoryReducer from "./category/reducer";
 import productReducer from "./product/reducer";
+import roleReducer from "./role/reducer";
 
 const rootReducer = combineReducers({
   login: loginReducer,
   category: categoryReducer,
   product: productReducer,
+  role: roleReducer
 });
 
 const store = createStore(
