@@ -1,4 +1,4 @@
-import { GETROLELIST, MANAGEROLEADD } from "./constants";
+import { GETROLELIST, MANAGEROLEADD, SETUPAUTHORITY } from "./constants";
 import { ModifyAction } from "./actions";
 
 interface StoreState {
@@ -19,8 +19,18 @@ const roleReducer = (state = defaultState, action: ModifyAction) => {
     case MANAGEROLEADD:
       return {
         ...state,
-        roleList: [...state.roleList,action.payload]
-      }
+        roleList: [...state.roleList, action.payload],
+      };
+    case SETUPAUTHORITY:
+      return {
+        ...state,
+        roleList: state.roleList.map((item: any) => {
+          if (item._id === action.payload._id) {
+            item = action.payload;
+          }
+          return item;
+        }),
+      };
     default:
       return state;
   }
